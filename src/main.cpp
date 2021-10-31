@@ -2,24 +2,24 @@
 #include <WiFi.h>
 #include "Audio.h"
 
-// Config
-#define LILYGO_WATCH_2020_V3 // To use T-Watch2020 V3, please uncomment this line
+// T-Watch config
+#define LILYGO_WATCH_2020_V3
 #include <LilyGoWatch.h>
 
 TTGOClass *watch;
 TFT_eSPI *tft;
 
-// Pinos de conexão do ESP32-I2S e o módulo I2S/DAC CJMCU 1334
+//I2S T-Watch connection
 #define I2S_DOUT 33
 #define I2S_BCLK 26
 #define I2S_LRC 25
 
-// Cria o objeto que representará o áudio
+// audio object create
 Audio audio;
 
 // Wi-Fi ssid and password
-const char *ssid = "ssid";
-const char *password = "password";
+const char *ssid = "your ssid";
+const char *password = "your password";
 
 void startTwatch()
 {
@@ -55,18 +55,19 @@ void setup()
   startTwatch();
   startWifi();
 
-  // Ajusta os pinos de conexão I2S
+  // Set I2S pinout
   audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
 
-  // Ajusta o volume de saída
-  audio.setVolume(21); // 0...21
+  // Set volume
+  audio.setVolume(12); // 0...21
 
+  tft->setTextFont(2);
   tft->setTextColor(0x03EF, 0x0000);
   tft->println(" conectando com Google...");
-  audio.connecttospeech("parabéns. conexão okey. transcrição de texto okey. protocolo i2s okey", "pt");
+  audio.connecttospeech("parabéns. conexão okey. texto para fala okey. protocolo i2s okey", "pt");
 }
 
 void loop()
 {
-  audio.loop(); // Executa o loop interno da biblioteca audio
+  audio.loop();
 }
